@@ -13,7 +13,7 @@ axios.interceptors.request.use((config) => {
     return config
 })
 
-export const fetchTable = async ({ format = "ffcsv", area = "all", ...rest }: { username: string, password: string, name: string, format?: string, area?: string }) => {
+export const fetchTableFile = async ({ format = "ffcsv", area = "all", ...rest }: { username: string, password: string, name: string, format?: string, area?: string }) => {
     const response = await axios.get(`/2020/data/tablefile`, {
         params: {
             ...rest,
