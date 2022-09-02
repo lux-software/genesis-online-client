@@ -54,8 +54,8 @@ export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry =
             job: true
         }
     })
-
-    if (response.data.Status.Code === 99) {
+    console.log(response.data)
+    if (response.data.Status?.Code === 99) {
         const regex = new RegExp(`(${rest.name}_[0-9]*)`)
         const jobId = regex.exec(response.data.Status.Content)[0]
         let status: JobStatus = null
@@ -97,7 +97,7 @@ export type JobStatus = {
 }
 export type FetchTableJobResponse = {
     Ident: { Service: string, Method: string },
-    Status: {
+    Status?: {
         Code: number,
         Content: string
         Type: string
