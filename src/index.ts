@@ -24,7 +24,7 @@ export const fetchTableFile = async ({ format = "ffcsv", area = "all", ...rest }
             language: "de"
         }
     })
-    if (response.status === 200 && response.data.Status.Code !== 99 && format === "ffcsv") {
+    if (response.status === 200 && response.data.Status?.Code !== 99 && format === "ffcsv") {
         const result = await parseCSV(response.data, { header: true })
         return result.data
     }
@@ -54,8 +54,8 @@ export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry =
             job: true
         }
     })
-    console.log(response.data)
-    if (response.data.Status?.Code === 99) {
+
+    if (response.data?.Status?.Code === 99) {
         const regex = new RegExp(`(${rest.name}_[0-9]*)`)
         const jobId = regex.exec(response.data.Status.Content)[0]
         let status: JobStatus = null
@@ -70,9 +70,11 @@ export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry =
         if (status.State === 'Fertig') {
             return fetchJobResult({ format: "ffcsv", area: "all", ...rest, name: jobId })
         }
+
     } else if (response.status === 200 && format === "ffcsv") {
         return response.data
     }
+
     return response
 }
 
