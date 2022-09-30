@@ -15,7 +15,18 @@ axios.interceptors.request.use((config) => {
     return config
 })
 
-export const fetchTableFile = async ({ format = "ffcsv", area = "all", ...rest }: { username: string, password: string, name: string, format?: string, area?: string }) => {
+type GenesisTableRequest = {
+    username: string,
+    password: string,
+    name: string,
+    regionalvariable?: string,
+    startyear?: string
+    format?: string,
+    area?: string,
+    maxTry?: number
+}
+
+export const fetchTableFile = async ({ format = "ffcsv", area = "all", ...rest }: GenesisTableRequest) => {
     const response = await axios.get(`/2020/data/tablefile`, {
         params: {
             ...rest,
@@ -44,7 +55,7 @@ export const fetchJobResult = async ({ format = "ffcsv", area = "all", ...rest }
 }
 
 
-export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry = 20, ...rest }: { username: string, password: string, name: string, format?: string, area?: string, maxTry?: number }) => {
+export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry = 20, ...rest }: GenesisTableRequest) => {
     const response = await axios.get<FetchTableJobResponse>(`/2020/data/tablefile`, {
         params: {
             ...rest,
@@ -72,10 +83,10 @@ export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry =
         }
 
     } else if (response.status === 200 && format === "ffcsv") {
-        return response.data
+        return response.data as unknown as string
     }
 
-    return response
+    return response as unknown as string
 }
 
 export const getJobStatus = async ({ name, ...rest }: { username: string, password: string, name: string }) => {
