@@ -55,7 +55,7 @@ export const fetchJobResult = async ({ format = "ffcsv", area = "all", ...rest }
 }
 
 
-export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry = 20, ...rest }: GenesisTableRequest) => {
+export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry = 30, ...rest }: GenesisTableRequest) => {
     const response = await axios.get<FetchTableJobResponse>(`/2020/data/tablefile`, {
         params: {
             ...rest,
@@ -72,7 +72,7 @@ export const fetchTableAsJob = async ({ format = "ffcsv", area = "all", maxTry =
         let status: JobStatus = null
         let tries = 1
         do {
-            await delay(5000)
+            await delay(10000)
             status = await getJobStatus({ ...rest, name: jobId })
             console.log(`Try ${tries} with status ${status.State}`)
             tries += 1
